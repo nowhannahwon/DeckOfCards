@@ -1,0 +1,25 @@
+#title {
+  width: 381px;
+  height: 81px;
+}
+
+img {
+  border: 0
+}
+
+.blankgif {
+  height: 136px;
+  width: 106px;
+}
+
+.holdgif {
+  height: 50px
+  width: 106px
+}
+.textbold {
+  font-weight: bold;
+  font-size: 20px;
+}
+#currenthand {
+  font-size: 20px;
+}
