@@ -1,5 +1,3 @@
-alert("JS Loaded");
-
 //declare variables
 var score = 100;
 var dealt = false;
@@ -7,27 +5,15 @@ var hand = new Array(6);
 var held = new Array(6);
 var deck = new Array(53);
 
-//Make filename for image given card object
-function fname(){
-  return "Files" + this.num + this.suit + ".gif";
-}
-
-//Object constructor for cards
-function Card(num, suit) {
-  this.num = num;
-  this.suit = suit;
-  this.fname = fname;
-}
-
 //button event handler
 function DealDraw() {
-  if (dealt) {
-    Draw()
+  if (dealt == true) {
+    Draw();
   }
   else {
-    Deal()
+    Deal();
   }
-};
+}
 
 //programs Deal function
 
@@ -53,8 +39,8 @@ function Deal() {
 //Deal and Display cards
   for (i = 1; i < 6; i++) {
     hand[i] = deck[i];
-    document.images[i].src = "Files/" + hand[i].fname();
-    document.images[i + 5].src = "Files/hold.gif"
+    document.images[i].src= hand[i].fname();
+    document.images[i+5].src= "Files/hold.gif"
     held[i] = false;
   }
   dealt = true;
@@ -62,7 +48,7 @@ function Deal() {
   document.form1.total.value = score;
   document.images[11].src="Files/draw.gif";
   Addscore();
-};
+}
 
 //Hold or discard a card
 function Hold(num) {
@@ -71,13 +57,13 @@ function Hold(num) {
   }
   else if (!held[num]) {
       held[num] = true;
-      document.images[5 + num].src="Files/hold2.gif";
+      document.images[5+num].src="Files/hold2.gif";
   }
   else {
     held[num] = false;
-    document.images[5 + num].src="Files/hold.gif";
+    document.images[5+num].src="Files/hold.gif";
   }
-};
+}
 
 //Draw new cards
 function Draw() {
@@ -85,73 +71,84 @@ function Draw() {
   for (i = 1; i < 6; i++) {
     if (!held[i]) {
       hand[i] = deck[curcard++];
-      document.images[1].src = "Files/" + hand[i].fname();
+      document.images[i].src = hand[i].fname();
     }
   }
   dealt = false;
-  docuemnt.images[11].src = "Files/deal.gif";
+  document.images[11].src = "Files/deal.gif";
   score += Addscore();
   document.form1.total.value = score;
-};
+}
 
-//Calculate Score
+//Make filename for image given card object
+function fname(){
+  return "Files/" + this.num + this.suit + ".gif";
+}
+
+//Object constructor for cards
+function Card(num, suit) {
+  this.num = num;
+  this.suit = suit;
+  this.fname = fname;
+}
+
+//Numeric sort function
+function Numsort(a,b) {
+  return a - b;
+}
+
+// Calculate Score
 function Addscore() {
   var straight = false;
   var flush = false;
   var pairs = 0;
   var three = false;
   var tally = new Array(14);
-  //sorted array for convenience
+// sorted array for convenience
   var nums = new Array(5);
   for (i = 0; i < 5; i++) {
     nums[i] = hand[i+1].num;
   }
   nums.sort(Numsort);
-  //flush
+// flush
   if (hand[1].suit == hand[2].suit &&
       hand[2].suit == hand[3].suit &&
       hand[3].suit == hand[4].suit &&
       hand[4].suit == hand[5].suit) {
     flush = true;
   }
-  //straight (Ace low)
-  else if (nums[0] == nums[1] - 1 &&
+// straight (Ace low)
+  if (nums[0] == nums[1] - 1 &&
       nums[1] == nums[2] - 1 &&
       nums[2] == nums[3] - 1 &&
-      nums[3] == nums[4] - 1 &&) {
+      nums[3] == nums[4] - 1) {
     straight = true;
   }
-  //straight (Ace high)
-  else if (nums[0] == 1 &&
-           nums[1] == 10 &&
-           nums[2] == 11 &&
-           nums[3] == 12 &&
-           nums[4] == 13) {
+// straight (Ace high)
+  if (nums[0] == 1 && nums[1] == 10 && nums[2] == 11
+      && nums[3] == 12 && nums[4] == 13) {
     straight = true;
   }
-  //royal flush, straight flush, straight, flush
-  else if (straight &&
-           flush &&
-           numss[4] == 13 &&
-           nums[0] == 1) {
-    document.form1.message.value = "Royal Flush";
+// royal flush, straight flush, straight, flush
+  else if (straight && flush && nums[4] == 13 && nums[0] == 1) {
+    document.form1.message.value="Royal Flush";
     return 100;
   }
   else if (straight && flush) {
-    document.form1.message.value = "Straight Flush";
+    document.form1.message.value="Straight Flush";
     return 50;
   }
   else if (straight) {
-    document.form1.message.value = "Straight";
+    document.form1.message.value="Straight";
     return 4;
   }
   else if (flush) {
-    document.form1.message.value = "Flush";
+    document.form1.message.value="Flush";
     return 5;
   }
-  //tally array is a count for each card value
+// tally array is a count for each card value
   for (i = 1; i < 14; i++) {
-    tally[i] = 0;
+      tally[i] = 0;
   }
   for (i = 0; i < 5; i++) {
     tally[nums[i]] += 1;
@@ -168,30 +165,25 @@ function Addscore() {
       pairs += 1;
     }
   }
-  if (three && pairs ==1) {
-    document.form1.message.value = "Full House";
+  if (three && pairs == 1) {
+    document.form1.message.value="Full House";
     return 10;
   }
   else if (pairs == 2) {
-    document.form1.message.value = "Two Pair";
+    document.form1.message.value="Two Pair";
     return 2;
   }
   else if (three) {
-    document.form1.message.value = "Three of a Kind";
+    document.form1.message.value="Three of a Kind";
     return 3;
   }
   else if (pairs == 1) {
-    if (tally[1] == 2 ||
-        tally[11] == 2 ||
-        tally[12] == 2 ||
-        tally[13] == 2) {
-      document.form1.message.value = "Jacks or Better";
-      return 1;
+    if (tally[1] == 2 || tally[11]==2
+     || tally[12] == 2 || tally[13]==2) {
+     document.form1.message.value="Jacks or Better";
+     return 1;
     }
   }
-  document.form1.message.value = "No Score";
+  document.form1.message.value="No Score";
   return 0;
-}:
-
-
-
+}
