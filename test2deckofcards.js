@@ -1,98 +1,3 @@
-alert("JS Loaded");
-
-//declare variables
-var score = 100;
-var dealt = false;
-var hand = new Array(6);
-var held = new Array(6);
-var deck = new Array(53);
-
-//Make filename for image given card object
-function fname(){
-  return "Files" + this.num + this.suit + ".gif";
-}
-
-//Object constructor for cards
-function Card(num, suit) {
-  this.num = num;
-  this.suit = suit;
-  this.fname = fname;
-}
-
-//button event handler
-function DealDraw() {
-  if (dealt) {
-    Draw()
-  }
-  else {
-    Deal()
-  }
-};
-
-//programs Deal function
-
-function Deal() {
-  //fill the deck
-  for (i = 1; i < 14; i++) {
-    deck[i] = new Card(i,"c");
-    deck[i+13] = new Card(i,"h");
-    deck[i+26] = new Card(i,"s");
-    deck[i+39] = new Card(i,"d");
-  }
-
-  //shuffle the deck
-  //for any two cards chosen at random, switch them
-  var n = Math.floor(400 * Math.random() + 500);
-  for (i = 1; i < n; i++) {
-    card1 = Math.floor(52*Math.random() + 1);
-    card2 = Math.floor(52*Math.random() + 1);
-    temp = deck[card2];
-    deck[card2] = deck[card1];
-    deck[card1] = temp;
-  }
-//Deal and Display cards
-  for (i = 1; i < 6; i++) {
-    hand[i] = deck[i];
-    document.images[i].src = "Files/" + hand[i].fname();
-    document.images[i + 5].src = "Files/hold.gif"
-    held[i] = false;
-  }
-  dealt = true;
-  score = score -1; //deduct one for bet amount
-  document.form1.total.value = score;
-  document.images[11].src="Files/draw.gif";
-  Addscore();
-};
-
-//Hold or discard a card
-function Hold(num) {
-  if (!dealt) {
-    return
-  }
-  else if (!held[num]) {
-      held[num] = true;
-      document.images[5 + num].src="Files/hold2.gif";
-  }
-  else {
-    held[num] = false;
-    document.images[5 + num].src="Files/hold.gif";
-  }
-};
-
-//Draw new cards
-function Draw() {
-  var curcard = 6;
-  for (i = 1; i < 6; i++) {
-    if (!held[i]) {
-      hand[i] = deck[curcard++];
-      document.images[1].src = "Files/" + hand[i].fname();
-    }
-  }
-  dealt = false;
-  docuemnt.images[11].src = "Files/deal.gif";
-  score += Addscore();
-  document.form1.total.value = score;
-};
 
 //Calculate Score
 function Addscore() {
@@ -132,7 +37,7 @@ function Addscore() {
   //royal flush, straight flush, straight, flush
   else if (straight &&
            flush &&
-           numss[4] == 13 &&
+           nums[4] == 13 &&
            nums[0] == 1) {
     document.form1.message.value = "Royal Flush";
     return 100;
@@ -168,7 +73,7 @@ function Addscore() {
       pairs += 1;
     }
   }
-  if (three && pairs ==1) {
+  if (three && pairs == 1) {
     document.form1.message.value = "Full House";
     return 10;
   }
@@ -191,7 +96,4 @@ function Addscore() {
   }
   document.form1.message.value = "No Score";
   return 0;
-}:
-
-
-
+};
