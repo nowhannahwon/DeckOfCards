@@ -6,6 +6,10 @@ var held = new Array(6);
 var deck = new Array(53);
 
 //button event handler
+function getCurrentBet() {
+  return document.form1.currentBet.value;
+}
+
 function DealDraw() {
   if (dealt == true) {
     Draw();
@@ -44,7 +48,7 @@ function Deal() {
     held[i] = false;
   }
   dealt = true;
-  score = score -1; //deduct one for bet amount
+  score = score - getCurrentBet(); //deduct one for bet amount
   document.form1.total.value = score;
   document.images[11].src="Files/draw.gif";
   Addscore();
@@ -132,19 +136,19 @@ function Addscore() {
 // royal flush, straight flush, straight, flush
   else if (straight && flush && nums[4] == 13 && nums[0] == 1) {
     document.form1.message.value="Royal Flush";
-    return 100;
+    return 100*getCurrentBet();
   }
   else if (straight && flush) {
     document.form1.message.value="Straight Flush";
-    return 50;
+    return 50*getCurrentBet();
   }
   else if (straight) {
     document.form1.message.value="Straight";
-    return 4;
+    return 4*getCurrentBet();
   }
   else if (flush) {
     document.form1.message.value="Flush";
-    return 5;
+    return 5*getCurrentBet();
   }
 // tally array is a count for each card value
   for (i = 1; i < 14; i++) {
@@ -156,7 +160,7 @@ function Addscore() {
   for (i = 1; i < 14; i++) {
     if (tally[i] == 4) {
       document.form1.message.value = "Four of a Kind";
-      return 25;
+      return 25*getCurrentBet();
     }
     else if (tally[i] == 3) {
       three = true;
@@ -167,21 +171,21 @@ function Addscore() {
   }
   if (three && pairs == 1) {
     document.form1.message.value="Full House";
-    return 10;
+    return 10*getCurrentBet();
   }
   else if (pairs == 2) {
     document.form1.message.value="Two Pair";
-    return 2;
+    return 2*getCurrentBet();
   }
   else if (three) {
     document.form1.message.value="Three of a Kind";
-    return 3;
+    return 3*getCurrentBet();
   }
   else if (pairs == 1) {
     if (tally[1] == 2 || tally[11]==2
      || tally[12] == 2 || tally[13]==2) {
      document.form1.message.value="Jacks or Better";
-     return 1;
+     return 1*getCurrentBet();
     }
   }
   document.form1.message.value="No Score";
